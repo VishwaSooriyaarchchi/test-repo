@@ -62,23 +62,22 @@ def conv_kx1(in_channels, out_channels, kernel_size, stride=1):
 
 
 class Conv_Layer(nn.Module):
-    """
-    CNN layer with/without activation
-    -- Conv_kx1_ReLU-Dropout
-    """
     def __init__(self, in_channels, out_channels, kernel_size, dropout_rate, post_activation):
         super(Conv_Layer, self).__init__()
+        self.conv = conv_kx1(in_channels, out_channels, kernel_size)
+        self.bn = nn.BatchNorm1d(out_channels)
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(p=dropout_rate if dropout_rate is not None else 0)
-        self.conv = conv_kx1(in_channels, out_channels, kernel_size)
         self.post_activation = post_activation
 
     def forward(self, x):
         out = self.conv(x)
+        out = self.bn(out)
         if self.post_activation:
-            out = self.dropout(self.relu(out))
-
+            out = self.relu(out)
+            out = self.dropout(out)
         return out
+
 
 
 class ResNet_Block(nn.Module):
