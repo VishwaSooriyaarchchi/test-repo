@@ -42,7 +42,7 @@ def get_dataset_from_configs(data_cfg, split_idx=None):
 
         for pos in range(len(mrna_rev_seq) - 40 + 1):
             mirna_esa, cts_rev_esa, esa_score = extended_seed_alignment(mirna_seq, mrna_rev_seq[pos:pos+40])
-            if split_idx not in ["train", "val"] and esa_score < 6: continue
+            if split_idx not in ["train", "val"] and esa_score < 7: continue
             X.append(torch.from_numpy(encode_RNA(mirna_seq, mirna_esa,
                                                  mrna_rev_seq[pos:pos+40], cts_rev_esa, data_cfg.with_esa)))
             labels.append(torch.from_numpy(np.array(label)).unsqueeze(0))
